@@ -3,8 +3,7 @@ import React, {useState, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Button,  Modal,  Table} from "react-bootstrap";
 import {BsTrash, BsPencil} from "react-icons/bs";
-import FormAdd from "./helpers/Form";
-
+import FormEdit from "./helpers/FormEdit";
 
 const UserApp = () => {
     const [users, setUsers] = useState([]);
@@ -91,9 +90,8 @@ const UserApp = () => {
                     <td>
                       <div className="btn__table">
                         <Button className="mt-2" onClick={() => handleShow(el.id)} variant="danger"><BsTrash/></Button>
-                        <Button className="mt-2" onClick={handleShow} variant="primary"><BsPencil/></Button>
+                        <Button className="mt-2" onClick={null} variant="primary"><BsPencil/></Button>
                       </div>
-
                     </td>
                   </tr>
                   </tbody>

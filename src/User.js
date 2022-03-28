@@ -1,9 +1,11 @@
 // eslint-disable-next-line jsx-a11y/href-no-hash
 import React, {useState, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Button,  Modal,  Table} from "react-bootstrap";
+import {Button, Table} from "react-bootstrap";
 import {BsTrash, BsPencil} from "react-icons/bs";
-import FormEdit from "./helpers/FormEdit";
+import DeleteModal from "./helpers/deleteModal";
+import {deleteUser, getUsers} from './helpers/fetchApi'
+
 
 const UserApp = () => {
     const [users, setUsers] = useState([]);
@@ -16,46 +18,8 @@ const UserApp = () => {
     }
 
     useEffect(() => {
-      getUsers();
+      getUsers(setUsers);
     }, []);
-
-    function getUsers() {
-      fetch("https://jsonplaceholder.typicode.com/users")
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          data.sort((a, b) => a.name.localeCompare(b.name))
-          setUsers(data);
-          console.log(data);
-        });
-    }
-
-    const deleteUser = (id) => {
-      fetch(`https://jsonplaceholder.typicode.com/users/:${id}`, {
-        method: 'DELETE'
-      })
-        .then((res) => {
-          res.json()
-            .then((res) => {
-              console.log(res);
-              setUsers(prev => prev.filter(el => el.id !== id))
-            })
-        })
-    }
-
-  const editUser = () => {
-    fetch(`https://jsonplaceholder.typicode.com/users`, {
-      method: 'PUT'
-    })
-      .then((res) => {
-        res.json()
-          .then((res) => {
-            console.log("______________________________");
-            console.log(res);
-          })
-      })
-  }
 
     return (
       <>
@@ -99,26 +63,13 @@ const UserApp = () => {
               })
             }
           </Table>
-          <Modal
+          <DeleteModal
             show={show}
-            onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Delete</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <p>Are you sure you want to delete?</p>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary">Close</Button>
-              <Button onClick={() => {
-                deleteUser(userId);
-                handleClose()
-              }} variant="danger">Delete</Button>
-            </Modal.Footer>
-          </Modal>
+            onHide={handleClose}//handleClose
+            deleteUser={() => deleteUser(setUsers,userId)}
+            handleClose={handleClose}
+
+          />
         </div>
       </>
     );
